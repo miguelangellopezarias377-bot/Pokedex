@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokédex Oficial - #001 a #1025</title>
+  
+  <!-- Tipografías Retro y Digitales -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&family=Press+Start+2P&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Estilos de la Pokédex y Combate -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/battle.css">
+</head>
+<body>
+
+  <!-- Fondo ambiental de laboratorio Pokémon -->
+  <div class="pokedex-background">
+    <div class="pokeball-bg-watermark"></div>
+  </div>
+
+  <main class="pokedex-container">
+    <!-- ==============================================
+         PANEL IZQUIERDO: PANTALLA PRINCIPAL Y CONTROLES
+         ============================================== -->
+    <section class="pokedex-left" aria-label="Panel Principal Pokédex">
+      
+      <!-- Parte superior con sensor azul y luces LED -->
+      <div class="top-sensors">
+        <div class="big-blue-sensor" id="mainSensor" title="Lente de Escaneo">
+          <div class="sensor-reflection"></div>
+          <div class="sensor-inner-glow"></div>
+        </div>
+        <div class="led-lights">
+          <span class="led led-red" id="ledRed" title="Indicador de Estado"></span>
+          <span class="led led-yellow" id="ledYellow" title="Indicador de Búsqueda"></span>
+          <span class="led led-green" id="ledGreen" title="Indicador de Conexión"></span>
+        </div>
+      </div>
+
+      <!-- Bisel de la Pantalla Principal -->
+      <div class="main-screen-frame">
+        <div class="frame-top-decorations">
+          <span class="mini-light"></span>
+          <span class="mini-light"></span>
+        </div>
+
+        <!-- Pantalla LCD Principal -->
+        <div class="main-screen-lcd" id="mainScreen">
+          <div class="scanlines-overlay"></div>
+
+          <!-- Cabecera de la Pantalla -->
+          <div class="screen-header">
+            <span class="dex-number-badge" id="dexNumberDisplay">#004</span>
+            <span class="dex-pokemon-name" id="pokemonNameDisplay">CHARMANDER</span>
+          </div>
+
+          <!-- Visualizador Central de Sprite -->
+          <div class="sprite-stage">
+            <div class="loading-scanner" id="loadingScanner">
+              <div class="scanner-laser"></div>
+              <span class="loading-text">ESCANEANDO DATOS...</span>
+            </div>
+
+            <!-- Imagen / Animación del Pokémon -->
+            <img 
+              id="pokemonSprite" 
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png" 
+              alt="Charmander"
+              class="pokemon-main-image"
+            >
+
+            <!-- Onda sonora cuando ruge -->
+            <div class="sound-wave-visualizer" id="soundVisualizer">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+
+            <!-- Destellos para versión Shiny -->
+            <div class="shiny-sparkles" id="shinySparkles">
+              <i class="fa-solid fa-sparkles"></i>
+            </div>
+          </div>
+
+          <!-- Pie de la Pantalla: Tipos y Sonido -->
+          <div class="screen-footer">
+            <div class="types-container" id="typesContainer">
+              <span class="type-badge type-fire">FUEGO</span>
+            </div>
+            <div class="screen-meta">
+              <span class="genus-tag" id="genusDisplay">Pokémon Lagartija</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Decoración inferior del marco de la pantalla -->
+        <div class="frame-bottom-decorations">
+          <button class="screen-sound-btn" id="quickCryBtn" title="Reproducir rugido oficial">
+            <i class="fa-solid fa-volume-high"></i>
+          </button>
+          <div class="speaker-slits">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controles Físicos Inferiores del Panel Izquierdo -->
+      <div class="left-controls">
+        <!-- Botón redondo grande de sonido -->
+        <div class="control-action-buttons">
+          <button class="btn-round-sound" id="playCryButton" title="Emitir Rugido (Cry)">
+            <i class="fa-solid fa-microphone-lines"></i>
+            <span>RUGIDO</span>
+          </button>
+
+          <!-- Botón de Forma Variocolor (Shiny) -->
+          <button class="btn-shiny-toggle" id="toggleShinyBtn" title="Cambiar a Versión Variocolor / Shiny">
+            <i class="fa-solid fa-star"></i>
+            <span>SHINY</span>
+          </button>
+
+          <!-- Botón Directo ¡LUCHAR! -->
+          <button class="btn-round-sound" id="btnFightCurrent" style="background: radial-gradient(circle at 35% 35%, #DC2626, #991B1B); border-color: #F87171;" title="¡Luchar con este Pokémon!">
+            <i class="fa-solid fa-gamepad"></i>
+            <span>¡LUCHAR!</span>
+          </button>
+        </div>
+
+        <!-- Cruceta Direccional (D-PAD) -->
+        <div class="d-pad" aria-label="Cruceta Direccional">
+          <button class="d-pad-btn d-pad-up" id="dpadUp" title="Anterior"></button>
+          <button class="d-pad-btn d-pad-left" id="dpadLeft" title="Anterior Pokémon"></button>
+          <div class="d-pad-center"></div>
+          <button class="d-pad-btn d-pad-right" id="dpadRight" title="Siguiente Pokémon"></button>
+          <button class="d-pad-btn d-pad-down" id="dpadDown" title="Siguiente"></button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==============================================
+         BISAGRA METÁLICA CENTRAL DE LA POKÉDEX
+         ============================================== -->
+    <div class="pokedex-hinge" aria-hidden="true">
+      <div class="hinge-bar"></div>
+      <div class="hinge-bar"></div>
+    </div>
+
+    <!-- ==============================================
+         PANEL DERECHO: ESTADÍSTICAS, EVOLUCIONES Y LISTA
+         ============================================== -->
+    <section class="pokedex-right" aria-label="Panel de Información y Datos">
+      
+      <!-- Muesca superior estilizada -->
+      <div class="right-notch-header">
+        <div class="brand-title">POKÉDEX NACIONAL • 1,025 ESPECIES</div>
+      </div>
+
+      <!-- Barra de Búsqueda y Filtros de la Pokédex -->
+      <div class="pokedex-search-bar">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Buscar por #004 o nombre..." 
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button id="clearSearchBtn" class="btn-clear-search" title="Limpiar búsqueda">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Selector de Generaciones (Gen 1 a Gen 9) -->
+        <select id="generationSelect" class="pokedex-select" title="Filtrar por Generación">
+          <option value="all">Todas las Regiones</option>
+          <option value="1">Gen I (Kanto #001-#151)</option>
+          <option value="2">Gen II (Johto #152-#251)</option>
+          <option value="3">Gen III (Hoenn #252-#386)</option>
+          <option value="4">Gen IV (Sinnoh #387-#493)</option>
+          <option value="5">Gen V (Teselia #494-#649)</option>
+          <option value="6">Gen VI (Kalos #650-#721)</option>
+          <option value="7">Gen VII (Alola #722-#809)</option>
+          <option value="8">Gen VIII (Galar #810-#905)</option>
+          <option value="9">Gen IX (Paldea #906-#1025)</option>
+        </select>
+
+        <!-- Selector de Elemento / Tipo -->
+        <select id="typeSelect" class="pokedex-select" title="Filtrar por Tipo">
+          <option value="all">Todos los Tipos</option>
+          <option value="fire">Fuego</option>
+          <option value="water">Agua</option>
+          <option value="grass">Planta</option>
+          <option value="electric">Eléctrico</option>
+          <option value="normal">Normal</option>
+          <option value="ice">Hielo</option>
+          <option value="fighting">Lucha</option>
+          <option value="poison">Veneno</option>
+          <option value="ground">Tierra</option>
+          <option value="flying">Volador</option>
+          <option value="psychic">Psíquico</option>
+          <option value="bug">Bicho</option>
+          <option value="rock">Roca</option>
+          <option value="ghost">Fantasma</option>
+          <option value="dragon">Dragón</option>
+          <option value="dark">Siniestro</option>
+          <option value="steel">Acero</option>
+          <option value="fairy">Hada</option>
+        </select>
+      </div>
+
+      <!-- Pantalla LCD Secundaria de Información -->
+      <div class="info-screen-lcd">
+        <!-- Pestañas de Navegación de Datos -->
+        <nav class="info-tabs" role="tablist">
+          <button class="info-tab active" data-tab="stats" role="tab">
+            <i class="fa-solid fa-chart-simple"></i> ESTADÍSTICAS
+          </button>
+          <button class="info-tab" data-tab="evolutions" role="tab">
+            <i class="fa-solid fa-dna"></i> EVOLUCIONES
+          </button>
+          <button class="info-tab" data-tab="abilities" role="tab">
+            <i class="fa-solid fa-bolt"></i> HABILIDADES
+          </button>
+          <button class="info-tab" data-tab="about" role="tab">
+            <i class="fa-solid fa-book-open"></i> DESCRIPCIÓN
+          </button>
+          <button class="info-tab" data-tab="catalog" role="tab">
+            <i class="fa-solid fa-list-ol"></i> ÍNDICE
+          </button>
+        </nav>
+
+        <!-- Contenido de las Pestañas -->
+        <div class="tab-content-area">
+          
+          <!-- Pestaña 1: Estadísticas y Medidas -->
+          <div class="tab-pane active" id="tabStats">
+            <div class="physique-grid">
+              <div class="physique-item">
+                <span class="physique-label">ALTURA</span>
+                <span class="physique-value" id="heightDisplay">0.6 m</span>
+              </div>
+              <div class="physique-item">
+                <span class="physique-label">PESO</span>
+                <span class="physique-value" id="weightDisplay">8.5 kg</span>
+              </div>
+              <div class="physique-item">
+                <span class="physique-label">TOTAL BASE</span>
+                <span class="physique-value highlight" id="totalStatsDisplay">309</span>
+              </div>
+            </div>
+
+            <div class="stats-list" id="statsList">
+              <!-- Se rellena dinámicamente con las 6 estadísticas -->
+            </div>
+          </div>
+
+          <!-- Pestaña 2: Cadena de Evoluciones -->
+          <div class="tab-pane" id="tabEvolutions">
+            <div class="evolution-chain-container" id="evolutionChainContainer">
+              <!-- Se rellena dinámicamente con las fases evolutivas -->
+            </div>
+          </div>
+
+          <!-- Pestaña 3: Habilidades y Movimientos -->
+          <div class="tab-pane" id="tabAbilities">
+            <div class="abilities-container">
+              <div class="abilities-section-title">
+                <i class="fa-solid fa-dna"></i> HABILIDADES INNATAS
+              </div>
+              <div class="abilities-cards-list" id="abilitiesList">
+                <!-- Se rellena dinámicamente -->
+              </div>
+
+              <div class="abilities-section-title" style="margin-top: 10px;">
+                <i class="fa-solid fa-burst"></i> MOVIMIENTOS APRENDIBLES
+              </div>
+              <div class="moves-table-container">
+                <table class="moves-table">
+                  <thead>
+                    <tr>
+                      <th>MOVIMIENTO</th>
+                      <th>TIPO</th>
+                      <th>CAT.</th>
+                      <th>POT.</th>
+                      <th>PREC.</th>
+                      <th>MÉTODO</th>
+                    </tr>
+                  </thead>
+                  <tbody id="movesTableBody">
+                    <!-- Se rellena dinámicamente -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pestaña 4: Descripción Oficial de la Pokédex -->
+          <div class="tab-pane" id="tabAbout">
+            <div class="flavor-entry-box">
+              <div class="flavor-header">
+                <i class="fa-solid fa-quote-left"></i>
+                <span>REGISTRO OFICIAL</span>
+                <button class="btn-voice-read" id="btnSpeakDesc" title="Leer descripción con voz">
+                  <i class="fa-solid fa-volume-low"></i> Escuchar
+                </button>
+              </div>
+              <p class="flavor-text" id="flavorTextDisplay">
+                Este Pokémon nace con una llama en la punta de la cola. Si se le apagara, fallecería.
+              </p>
+            </div>
+          </div>
+
+          <!-- Pestaña 4: Índice General de Especies -->
+          <div class="tab-pane" id="tabCatalog">
+            <div class="catalog-grid" id="catalogGrid">
+              <!-- Rejilla de selección rápida de Pokémon -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Teclado Numérico y Botones Físicos Inferiores -->
+      <div class="right-controls">
+        <div class="keypad-grid">
+          <button class="key-btn" data-jump="1" title="Ir al #001 Bulbasaur">1</button>
+          <button class="key-btn" data-jump="4" title="Ir al #004 Charmander">4</button>
+          <button class="key-btn" data-jump="7" title="Ir al #007 Squirtle">7</button>
+          <button class="key-btn" data-jump="25" title="Ir al #025 Pikachu">25</button>
+          <button class="key-btn" data-jump="133" title="Ir al #133 Eevee">133</button>
+          <button class="key-btn" data-jump="150" title="Ir al #150 Mewtwo">150</button>
+          <button class="key-btn" data-jump="249" title="Ir al #249 Lugia">249</button>
+          <button class="key-btn" data-jump="384" title="Ir al #384 Rayquaza">384</button>
+          <button class="key-btn" data-jump="448" title="Ir al #448 Lucario">448</button>
+          <button class="key-btn" data-jump="1025" title="Ir al #1025 Pecharunt">1025</button>
+        </div>
+
+        <div class="nav-arrow-buttons">
+          <button class="nav-btn prev-btn" id="prevPokemonBtn" title="Pokémon Anterior">
+            <i class="fa-solid fa-backward"></i> ANTERIOR
+          </button>
+          <button class="nav-btn random-btn" id="randomPokemonBtn" title="Pokémon Aleatorio">
+            <i class="fa-solid fa-dice"></i> AZAR
+          </button>
+          <button class="nav-btn next-btn" id="nextPokemonBtn" title="Siguiente Pokémon">
+            SIGUIENTE <i class="fa-solid fa-forward"></i>
+          </button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ==============================================
+       ARENA DE COMBATE POKÉMON (MODAL DE BATALLA)
+       ============================================== -->
+  <div class="battle-modal-overlay" id="battleModalOverlay">
+    <div class="battle-container">
+      
+      <!-- Cabecera de la Batalla -->
+      <div class="battle-header">
+        <div class="battle-title">
+          <i class="fa-solid fa-gamepad"></i>
+          <span>ARENA DE COMBATE POKÉMON</span>
+        </div>
+        <button class="battle-close-btn" id="closeBattleBtn" title="Salir del combate">&times;</button>
+      </div>
+
+      <!-- VISTA 1: CONFIGURACIÓN Y SELECCIÓN DE EQUIPO -->
+      <div class="battle-setup-view" id="battleSetupView">
+        <div class="setup-section-title">
+          <i class="fa-solid fa-trophy"></i> ELIGE EL FORMATO DE COMBATE
+        </div>
+        
+        <div class="mode-selector-grid">
+          <div class="mode-card active" data-mode="1v1">
+            <span class="mode-badge">1 vs 1</span>
+            <span class="mode-desc">Duelo Individual</span>
+          </div>
+          <div class="mode-card" data-mode="1v2">
+            <span class="mode-badge">1 vs 2</span>
+            <span class="mode-desc">Desafío Doble</span>
+          </div>
+          <div class="mode-card" data-mode="2v2">
+            <span class="mode-badge">2 vs 2</span>
+            <span class="mode-desc">Por Parejas</span>
+          </div>
+          <div class="mode-card" data-mode="3v3">
+            <span class="mode-badge">3 vs 3</span>
+            <span class="mode-desc">Torneo Tríos</span>
+          </div>
+          <div class="mode-card" data-mode="6v6">
+            <span class="mode-badge">6 vs 6</span>
+            <span class="mode-desc">Liga Pokémon</span>
+          </div>
+        </div>
+
+        <!-- Vista Previa de Equipos -->
+        <div class="setup-section-title" style="margin-top: 8px;">
+          <i class="fa-solid fa-users"></i> EQUIPOS PARTICIPANTES
+        </div>
+        
+        <div class="teams-preview-container">
+          <!-- Equipo del Jugador -->
+          <div class="team-box">
+            <div class="team-box-header player-header">
+              <span>TU EQUIPO</span>
+              <span id="playerTeamCount">1 Pokémon</span>
+            </div>
+            <div class="team-slots-list" id="playerTeamSlots">
+              <!-- Se rellena dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Equipo Rival -->
+          <div class="team-box">
+            <div class="team-box-header rival-header">
+              <span>EQUIPO RIVAL</span>
+              <span id="rivalTeamCount">1 Pokémon</span>
+            </div>
+            <div class="team-slots-list" id="rivalTeamSlots">
+              <!-- Se rellena dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Opciones de Selección de Equipo -->
+        <div class="setup-actions">
+          <button class="btn-setup-secondary" id="btnUseCurrentPokemon">
+            <i class="fa-solid fa-crosshairs"></i> Usar Pokémon Actual
+          </button>
+          <button class="btn-setup-secondary" id="btnPickCustomPokemon" title="Seleccionar qué Pokémon quieres en tu equipo">
+            <i class="fa-solid fa-hand-pointer"></i> Elegir Pokémon
+          </button>
+          <button class="btn-setup-secondary" id="btnRandomizeTeams">
+            <i class="fa-solid fa-shuffle"></i> Equipos al Azar
+          </button>
+          <button class="btn-start-battle" id="btnStartBattleEngine">
+            <i class="fa-solid fa-swords"></i> ¡COMENZAR COMBATE!
+          </button>
+        </div>
+      </div>
+
+      <!-- MODAL SELECTOR DE POKÉMON PARA EQUIPOS -->
+      <div class="team-picker-overlay" id="teamPickerOverlay">
+        <div class="team-picker-header">
+          <span id="teamPickerTitle">ELIGE UN POKÉMON PARA TU EQUIPO</span>
+          <button class="battle-close-btn" id="closeTeamPickerBtn">&times;</button>
+        </div>
+        <div class="team-picker-search">
+          <input type="text" id="teamPickerSearchInput" placeholder="Buscar por #004 o nombre...">
+          <select id="teamPickerGenSelect" class="pokedex-select">
+            <option value="all">Todas las Regiones</option>
+            <option value="1">Gen I (Kanto)</option>
+            <option value="2">Gen II (Johto)</option>
+            <option value="3">Gen III (Hoenn)</option>
+            <option value="4">Gen IV (Sinnoh)</option>
+            <option value="5">Gen V (Teselia)</option>
+            <option value="6">Gen VI (Kalos)</option>
+            <option value="7">Gen VII (Alola)</option>
+            <option value="8">Gen VIII (Galar)</option>
+            <option value="9">Gen IX (Paldea)</option>
+          </select>
+        </div>
+        <div class="team-picker-grid" id="teamPickerGrid">
+          <!-- Se rellena con los 1,025 Pokémon -->
+        </div>
+      </div>
+
+      <!-- VISTA 2: ESTADIO Y PANTALLA DE COMBATE ACTIVA -->
+      <div class="battle-combat-view" id="battleCombatView">
+        <div class="battle-stage">
+          
+          <!-- Plataformas del Estadio -->
+          <div class="battle-platform rival-platform"></div>
+          <div class="battle-platform player-platform"></div>
+
+          <!-- HUD Rival (Superior Izquierda) -->
+          <div class="pokemon-hud rival-hud">
+            <div class="hud-top-row">
+              <span class="hud-name" id="rivalHudName">RIVAL</span>
+              <span class="hud-level" id="rivalHudLevel">Nv. 5</span>
+            </div>
+            <div class="hp-bar-container">
+              <span class="hp-label">PS</span>
+              <div class="hp-track">
+                <div class="hp-fill" id="rivalHpFill" style="width: 100%;"></div>
+              </div>
+            </div>
+            <div class="hud-bottom-row">
+              <div class="team-balls-indicator" id="rivalTeamBalls">
+                <!-- Pokéballs del equipo -->
+              </div>
+              <span class="hud-hp-numbers" id="rivalHpText">100%</span>
+            </div>
+          </div>
+
+          <!-- Sprite del Rival -->
+          <img id="rivalSprite" src="" alt="Rival" class="combatant-sprite rival-sprite-img">
+
+          <!-- Sprite del Jugador -->
+          <img id="playerSprite" src="" alt="Jugador" class="combatant-sprite player-sprite-img">
+
+          <!-- HUD Jugador (Inferior Derecha) -->
+          <div class="pokemon-hud player-hud">
+            <div class="hud-top-row">
+              <span class="hud-name" id="playerHudName">JUGADOR</span>
+              <span class="hud-level" id="playerHudLevel">Nv. 5</span>
+            </div>
+            <div class="hp-bar-container">
+              <span class="hp-label">PS</span>
+              <div class="hp-track">
+                <div class="hp-fill" id="playerHpFill" style="width: 100%;"></div>
+              </div>
+            </div>
+            <div class="hud-bottom-row">
+              <div class="team-balls-indicator" id="playerTeamBalls">
+                <!-- Pokéballs del equipo -->
+              </div>
+              <span class="hud-hp-numbers" id="playerHpText">20 / 20</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Consola de Diálogo y Botones de Movimientos -->
+        <div class="battle-console">
+          <!-- Cuadro de Diálogo Tipo Typewriter -->
+          <div class="battle-dialogue-box" id="battleDialogueBox">
+            ¡Comienza el combate! ¿Qué debería hacer tu Pokémon?
+          </div>
+
+          <!-- Panel de Acciones -->
+          <div class="battle-actions-panel">
+            <div class="moves-grid" id="battleMovesGrid">
+              <!-- 4 botones de ataque -->
+            </div>
+            <div class="aux-actions-row">
+              <button class="btn-aux btn-switch" id="btnBattleSwitch">
+                <i class="fa-solid fa-repeat"></i> Cambiar
+              </button>
+              <button class="btn-aux btn-flee" id="btnBattleFlee">
+                <i class="fa-solid fa-person-running"></i> Huir
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Desplegable para Cambiar de Pokémon -->
+        <div class="switch-team-overlay" id="switchTeamOverlay">
+          <div class="switch-team-header">
+            <span>SELECCIONA UN POKÉMON PARA RELEVO</span>
+            <button class="battle-close-btn" id="closeSwitchBtn">&times;</button>
+          </div>
+          <div class="switch-team-list" id="switchTeamList">
+            <!-- Lista de combatientes del jugador -->
+          </div>
+        </div>
+
+        <!-- Pantalla de Resultado (Victoria / Derrota) -->
+        <div class="battle-result-overlay" id="battleResultOverlay">
+          <div class="result-title" id="battleResultTitle">¡VICTORIA!</div>
+          <div class="result-subtitle" id="battleResultSubtitle">¡Has vencido en el combate Pokémon!</div>
+          <button class="btn-result-action" id="btnResultReplay">
+            <i class="fa-solid fa-rotate-right"></i> Jugar Otra Batalla
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts del Sistema -->
+  <script src="js/sound.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/battle.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

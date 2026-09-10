@@ -1,0 +1,1057 @@
+/* ==========================================================================
+   ARENA DE COMBATE POKÉMON - ESTILOS DE BATALLA (1v1, 1v2, 2v2, 6v6)
+   Inspirado en los estadios de batalla clásicos de la saga principal
+   ========================================================================== */
+
+/* Botón llamativo de acceso a la Batalla en la Pokédex */
+.btn-battle-launch {
+  background: linear-gradient(135deg, #EF4444 0%, #B91C1C 60%, #7F1D1D 100%);
+  border: 2px solid #FCA5A5;
+  border-radius: 8px;
+  padding: 6px 14px;
+  color: #FFF;
+  font-family: var(--font-retro);
+  font-size: 10px;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.7), 0 3px 0 #450A0A;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+  letter-spacing: 0.5px;
+}
+
+.btn-battle-launch:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.9), 0 4px 0 #450A0A;
+  filter: brightness(1.1);
+}
+
+.btn-battle-launch:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+}
+
+/* ==========================================================================
+   MODAL PRINCIPAL DE LA ARENA DE COMBATE
+   ========================================================================== */
+.battle-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.9);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.battle-modal-overlay.active {
+  display: flex;
+  animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPop {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.battle-container {
+  width: 100%;
+  max-width: 820px;
+  min-height: 580px;
+  background: #0F172A;
+  border: 4px solid #DC0A2D;
+  border-radius: 20px;
+  box-shadow: 0 0 35px rgba(220, 10, 45, 0.6), inset 0 0 20px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Barra superior de la Arena */
+.battle-header {
+  background: linear-gradient(90deg, #89061C, #DC0A2D, #89061C);
+  padding: 10px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #58000F;
+}
+
+.battle-title {
+  font-family: var(--font-retro);
+  font-size: 12px;
+  color: #FFF;
+  text-shadow: 1px 1px 3px #000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.battle-close-btn {
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #FFF;
+  color: #FFF;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.15s ease;
+}
+
+.battle-close-btn:hover {
+  background: #DC0A2D;
+  transform: rotate(90deg);
+}
+
+/* ==========================================================================
+   PANTALLA 1: CONFIGURACIÓN Y SELECCIÓN DE EQUIPO
+   ========================================================================== */
+.battle-setup-view {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.setup-section-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: #38BDF8;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Selector de Modo (1v1, 1v2, 6v6, etc.) */
+.mode-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.mode-card {
+  background: #1E293B;
+  border: 2px solid #334155;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.mode-card:hover {
+  border-color: #38BDF8;
+  background: #334155;
+}
+
+.mode-card.active {
+  border-color: #FACC15;
+  background: rgba(250, 204, 21, 0.15);
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
+}
+
+.mode-badge {
+  font-family: var(--font-retro);
+  font-size: 12px;
+  color: #F8FAFC;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.mode-desc {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+/* Vista previa de Equipos */
+.teams-preview-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+}
+
+.team-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.team-box-header {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-box-header.player-header { color: #4ADE80; }
+.team-box-header.rival-header { color: #F87171; }
+
+.team-slots-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.team-slot {
+  background: #1E293B;
+  border: 2px solid #475569;
+  border-radius: 8px;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.team-slot:hover {
+  border-color: #FACC15;
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
+}
+
+.team-slot img {
+  width: 45px;
+  height: 45px;
+  object-fit: contain;
+}
+
+.team-slot .slot-num {
+  position: absolute;
+  bottom: 2px;
+  right: 4px;
+  font-family: var(--font-retro);
+  font-size: 6px;
+  color: #94A3B8;
+}
+
+.team-slot .slot-edit-icon {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  font-size: 7px;
+  color: #38BDF8;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.team-slot:hover .slot-edit-icon {
+  opacity: 1;
+}
+
+/* Modal Selector de Pokémon para el combate */
+.team-picker-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.96);
+  z-index: 80;
+  display: none;
+  flex-direction: column;
+  padding: 18px;
+}
+
+.team-picker-overlay.active {
+  display: flex;
+}
+
+.team-picker-header {
+  font-family: var(--font-retro);
+  font-size: 11px;
+  color: #FACC15;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.team-picker-search {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.team-picker-search input {
+  flex: 1;
+  background: #0F172A;
+  border: 2px solid #334155;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #FFF;
+  font-family: var(--font-display);
+  font-size: 13px;
+  outline: none;
+}
+
+.team-picker-search input:focus {
+  border-color: #38BDF8;
+}
+
+.team-picker-grid {
+  flex: 1;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.team-picker-item {
+  background: #1E293B;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.team-picker-item:hover {
+  border-color: #38BDF8;
+  background: #334155;
+  transform: translateY(-2px);
+}
+
+.team-picker-item img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.team-picker-item .p-num {
+  font-family: var(--font-retro);
+  font-size: 7px;
+  color: #38BDF8;
+  margin-top: 2px;
+}
+
+.team-picker-item .p-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10px;
+  color: #FFF;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* Botones de acción del setup */
+.setup-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.btn-setup-secondary {
+  flex: 1;
+  background: #334155;
+  border: 2px solid #475569;
+  border-radius: 8px;
+  padding: 12px;
+  color: #FFF;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-setup-secondary:hover {
+  background: #475569;
+}
+
+.btn-start-battle {
+  flex: 2;
+  background: linear-gradient(135deg, #10B981, #059669);
+  border: 2px solid #6EE7B7;
+  border-radius: 8px;
+  padding: 12px;
+  color: #FFF;
+  font-family: var(--font-retro);
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.15s ease;
+}
+
+.btn-start-battle:hover {
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   PANTALLA 2: ARENA DE COMBATE ACTIVA
+   ========================================================================== */
+.battle-combat-view {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.battle-combat-view.active {
+  display: flex;
+}
+
+/* Estadio / Fondo de Batalla */
+.battle-stage {
+  flex: 1;
+  min-height: 330px;
+  background: radial-gradient(circle at 50% 30%, #38BDF8 0%, #1E3A8A 45%, #0F172A 85%);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px 24px;
+}
+
+/* Plataforma de césped del estadio */
+.battle-platform {
+  position: absolute;
+  width: 220px;
+  height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, #84CC16 0%, #4D7C0F 70%, #1F3805 100%);
+  border: 3px solid #65A30D;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+.rival-platform {
+  top: 95px;
+  right: 60px;
+}
+
+.player-platform {
+  bottom: 25px;
+  left: 60px;
+  width: 250px;
+  height: 60px;
+}
+
+/* HUD / Caja de Estado del Pokémon (Nombre, PS, Nivel) */
+.pokemon-hud {
+  background: rgba(15, 23, 42, 0.85);
+  border: 2px solid #475569;
+  border-radius: 10px;
+  padding: 8px 14px;
+  width: 230px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.rival-hud {
+  align-self: flex-start;
+  margin-left: 20px;
+  border-color: #EF4444;
+}
+
+.player-hud {
+  align-self: flex-end;
+  margin-right: 20px;
+  border-color: #22C55E;
+}
+
+.hud-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.hud-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: #FFF;
+  text-transform: uppercase;
+}
+
+.hud-level {
+  font-family: var(--font-retro);
+  font-size: 9px;
+  color: #FACC15;
+}
+
+/* Barra de PS */
+.hp-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0;
+}
+
+.hp-label {
+  font-family: var(--font-retro);
+  font-size: 8px;
+  color: #F59E0B;
+}
+
+.hp-track {
+  flex: 1;
+  height: 9px;
+  background: #1E293B;
+  border: 1px solid #000;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hp-fill {
+  height: 100%;
+  width: 100%;
+  background: #22C55E;
+  transition: width 0.5s ease-out, background-color 0.3s ease;
+  border-radius: 3px;
+}
+
+.hp-fill.hp-mid { background: #EAB308; }
+.hp-fill.hp-low { background: #EF4444; }
+
+.hud-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hud-hp-numbers {
+  font-family: var(--font-retro);
+  font-size: 8px;
+  color: #CBD5E1;
+}
+
+/* Pokéballs restantes del equipo */
+.team-balls-indicator {
+  display: flex;
+  gap: 3px;
+}
+
+.team-ball-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #EF4444;
+  border: 1px solid #FFF;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+}
+
+.team-ball-dot.fainted {
+  background: #475569;
+  border-color: #64748B;
+  opacity: 0.5;
+}
+
+/* Sprites de los Combatientes */
+.combatant-sprite {
+  position: absolute;
+  z-index: 2;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.7));
+  transition: transform 0.15s ease;
+}
+
+.rival-sprite-img {
+  top: 40px;
+  right: 105px;
+  max-width: 130px;
+  max-height: 130px;
+}
+
+.player-sprite-img {
+  bottom: 45px;
+  left: 110px;
+  max-width: 150px;
+  max-height: 150px;
+}
+
+/* Animaciones de Ataque e Impacto */
+.combatant-sprite.attack-lunge-player {
+  animation: lungePlayer 0.3s ease-in-out;
+}
+
+@keyframes lungePlayer {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(35px, -30px); }
+  100% { transform: translate(0, 0); }
+}
+
+.combatant-sprite.attack-lunge-rival {
+  animation: lungeRival 0.3s ease-in-out;
+}
+
+@keyframes lungeRival {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-35px, 30px); }
+  100% { transform: translate(0, 0); }
+}
+
+.combatant-sprite.hit-shake {
+  animation: hitShake 0.35s ease-in-out;
+  filter: brightness(2) drop-shadow(0 0 10px #EF4444) !important;
+}
+
+@keyframes hitShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-12px); }
+  40%, 80% { transform: translateX(12px); }
+}
+
+.combatant-sprite.faint-fall {
+  animation: faintFall 0.7s forwards ease-in;
+}
+
+@keyframes faintFall {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(80px); opacity: 0; }
+}
+
+/* ==========================================================================
+   CONSOLA DE CONTROL INFERIOR (DIÁLOGO Y MOVIMIENTOS)
+   ========================================================================== */
+.battle-console {
+  background: #0B1613;
+  border-top: 3px solid #334155;
+  padding: 12px 16px;
+  min-height: 140px;
+  display: flex;
+  gap: 14px;
+}
+
+/* Cuadro de texto de diálogo */
+.battle-dialogue-box {
+  flex: 1.2;
+  background: #07110E;
+  border: 2px solid #1E293B;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--lcd-text-green);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+}
+
+/* Panel de Acciones (4 Movimientos + Cambio + Huir) */
+.battle-actions-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.moves-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.btn-move {
+  background: #1E293B;
+  border: 2px solid #475569;
+  border-radius: 6px;
+  padding: 8px 6px;
+  color: #FFF;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: all 0.1s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-move:hover:not(:disabled) {
+  border-color: #38BDF8;
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.btn-move:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-move:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-move .move-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: left;
+}
+
+.btn-move .move-meta {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 9px;
+  margin-top: 3px;
+  color: #94A3B8;
+}
+
+.move-type-pill {
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: #FFF;
+  font-weight: 700;
+  font-size: 8px;
+  text-transform: uppercase;
+}
+
+/* Botones Auxiliares (Cambiar / Salir) */
+.aux-actions-row {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-aux {
+  flex: 1;
+  background: #334155;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  padding: 6px;
+  color: #E2E8F0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s ease;
+}
+
+.btn-aux:hover:not(:disabled) {
+  background: #475569;
+}
+
+.btn-aux.btn-switch {
+  background: #0284C7;
+  border-color: #38BDF8;
+}
+
+.btn-aux.btn-flee {
+  background: #64748B;
+}
+
+/* ==========================================================================
+   MODAL DE RELEVO / CAMBIO DE POKÉMON
+   ========================================================================== */
+.switch-team-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.95);
+  z-index: 50;
+  display: none;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.switch-team-overlay.active {
+  display: flex;
+}
+
+.switch-team-header {
+  font-family: var(--font-retro);
+  font-size: 11px;
+  color: #38BDF8;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.switch-team-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.switch-card {
+  background: #1E293B;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.switch-card:hover:not(.fainted):not(.current) {
+  border-color: #22C55E;
+  background: #334155;
+  transform: translateX(4px);
+}
+
+.switch-card.current {
+  border-color: #38BDF8;
+  background: rgba(56, 189, 248, 0.1);
+  cursor: default;
+}
+
+.switch-card.fainted {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+.switch-card img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.switch-card-info {
+  flex: 1;
+}
+
+.switch-card-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: #FFF;
+}
+
+.switch-card-hp {
+  font-family: var(--font-retro);
+  font-size: 8px;
+  color: #4ADE80;
+  margin-top: 3px;
+}
+
+/* ==========================================================================
+   PANTALLA DE RESULTADO FINAL (VICTORIA / DERROTA)
+   ========================================================================== */
+.battle-result-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.92);
+  z-index: 60;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 24px;
+}
+
+.battle-result-overlay.active {
+  display: flex;
+  animation: resultFade 0.4s ease;
+}
+
+@keyframes resultFade {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.result-title {
+  font-family: var(--font-retro);
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+
+.result-title.victory {
+  color: #FACC15;
+  text-shadow: 0 0 20px rgba(250, 204, 21, 0.8);
+}
+
+.result-title.defeat {
+  color: #EF4444;
+  text-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+}
+
+.result-subtitle {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: #E2E8F0;
+  max-width: 450px;
+}
+
+.btn-result-action {
+  background: linear-gradient(135deg, #0284C7, #0369A1);
+  border: 2px solid #38BDF8;
+  border-radius: 8px;
+  padding: 12px 24px;
+  color: #FFF;
+  font-family: var(--font-retro);
+  font-size: 11px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.5);
+  margin-top: 10px;
+}
+
+.btn-result-action:hover {
+  filter: brightness(1.15);
+}
+
+/* ==========================================================================
+   ESTILOS DE LA PESTAÑA HABILIDADES Y MOVIMIENTOS EN LA POKÉDEX
+   ========================================================================== */
+.abilities-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.abilities-section-title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--lcd-text-cyan);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+  padding-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.5px;
+}
+
+.abilities-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ability-card {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.ability-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.ability-card-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: #F8FAFC;
+}
+
+.ability-badge {
+  font-family: var(--font-retro);
+  font-size: 7px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge-normal-ability {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38BDF8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.badge-hidden-ability {
+  background: rgba(250, 204, 21, 0.2);
+  color: #FACC15;
+  border: 1px solid rgba(250, 204, 21, 0.4);
+}
+
+.ability-desc {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #94A3B8;
+  line-height: 1.4;
+}
+
+/* Tabla / Lista de Movimientos Aprendibles */
+.moves-table-container {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.moves-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.moves-table th {
+  background: #07110E;
+  color: #94A3B8;
+  font-family: var(--font-retro);
+  font-size: 7px;
+  padding: 6px 4px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-bottom: 1px solid #1E293B;
+}
+
+.moves-table td {
+  padding: 6px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: var(--font-display);
+  color: #E2E8F0;
+}
+
+.moves-table tr:hover {
+  background: rgba(58, 242, 151, 0.05);
+}
+
+.move-category-badge {
+  font-size: 9px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.category-physical { background: #DC2626; color: #FFF; }
+.category-special { background: #2563EB; color: #FFF; }
+.category-status { background: #64748B; color: #FFF; }
